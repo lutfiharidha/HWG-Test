@@ -33,3 +33,26 @@ php artisan migrate
 # Start the development server
 php artisan serve
 ```
+
+## Pretest in golang
+
+```
+package main
+
+import "fmt"
+
+func main() {
+    for i := 1; i <= 100; i++ {
+        if i%3 == 0 && i%5 == 0 {
+            fmt.Println("TigaLima")
+        } else if i%3 == 0 {
+            fmt.Println("Tiga")
+        } else if i%5 == 0 {
+            fmt.Println("Lima")
+        } else {
+            fmt.Println(i)
+        }
+    }
+}
+
+```
