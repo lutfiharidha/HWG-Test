@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('publisher');
             $table->string('publication_date');
             $table->integer('stock');
-            $table->uuid('category_id');
+            $table->uuid('category_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('book_categories')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('book_categories')->onDelete('set null');
         });
     }
 

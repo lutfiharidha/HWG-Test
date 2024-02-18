@@ -14,7 +14,8 @@ class BorrowingResource extends JsonResource
             'return_date' => $this->return_date,
             'actual_return_date' => $this->actual_return_date,
             'status' => $this->status,
-            'book' => $this->book->title,
+            'book' => $this->book?$this->book->title:null,
+            'borrower' => $this->user?$this->user->email:null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,23 +18,28 @@ use App\Http\Controllers\BorrowingController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::middleware('auth.jwt')->group(function () {
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/category', [BookCategoryController::class, 'index']);
+    Route::post('/category', [BookCategoryController::class, 'store']);
+    Route::put('/category/{id}', [BookCategoryController::class, 'update']);
+    Route::delete('/category/{id}', [BookCategoryController::class, 'delete']);
+
+    Route::get('/book', [BookController::class, 'index']);
+    Route::post('/book', [BookController::class, 'store']);
+    Route::put('/book/{id}', [BookController::class, 'update']);
+    Route::delete('/book/{id}', [BookController::class, 'delete']);
+
+    Route::get('/borrow', [BorrowingController::class, 'index']);
+    Route::post('/borrow', [BorrowingController::class, 'store']);
+    Route::put('/borrow/return/{id}', [BorrowingController::class, 'return']);
+    Route::delete('/borrow/{id}', [BorrowingController::class, 'delete']);
 });
 
 
-Route::get('/category', [BookCategoryController::class, 'index']);
-Route::post('/category', [BookCategoryController::class, 'store']);
-Route::put('/category/{id}', [BookCategoryController::class, 'update']);
-Route::delete('/category/{id}', [BookCategoryController::class, 'delete']);
 
-
-Route::get('/book', [BookController::class, 'index']);
-Route::post('/book', [BookController::class, 'store']);
-Route::put('/book/{id}', [BookController::class, 'update']);
-Route::delete('/book/{id}', [BookController::class, 'delete']);
-
-Route::get('/borrow', [BorrowingController::class, 'index']);
-Route::post('/borrow', [BorrowingController::class, 'store']);
-Route::put('/borrow/return/{id}', [BorrowingController::class, 'return']);
-Route::delete('/borrow/{id}', [BorrowingController::class, 'delete']);

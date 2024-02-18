@@ -17,40 +17,52 @@ class BookCategoryController extends Controller
 
     public function store(Request $request)
     {
+        try {
+            $validatedData = $request->validate([
+                'category_name' => 'required|string|max:255',
+            ]);
 
-        $validatedData = $request->validate([
-            'category_name' => 'required|string|max:255',
-        ]);
+            $category = new BookCategory();
+            $category->category_name = $validatedData['category_name'];
+            $category->save();
 
-        $category = new BookCategory();
-        $category->category_name = $validatedData['category_name'];
-        $category->save();
-
-        return response()->json(['message' => 'Category created successfully'], 201);
+            return response()->json(['message' => 'Category created successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function update(Request $request, $id)
     {
-        $category = BookCategory::findOrFail($id);
+        try {
+            $validatedData = $request->validate([
+                'category_name' => 'required|string|max:255',
+            ]);
 
-        $validatedData = $request->validate([
-            'category_name' => 'required|string|max:255',
-        ]);
+            $category = BookCategory::findOrFail($id);
+            $category->category_name = $validatedData['category_name'];
+            $category->save();
 
-        $category->category_name = $validatedData['category_name'];
-
-        $category->save();
-
-        return response()->json(['message' => 'Category updated successfully'], 200);
+            return response()->json(['message' => 'Category updated successfully'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Category not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function delete($id)
     {
-        $category = BookCategory::findOrFail($id);
+        try {
+            $category = BookCategory::findOrFail($id);
+            $category->delete();
 
-        $category->delete();
-
-        return response()->json(['message' => 'Category deleted successfully'], 200);
+            return response()->json(['message' => 'Category deleted successfully'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Category not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }
 

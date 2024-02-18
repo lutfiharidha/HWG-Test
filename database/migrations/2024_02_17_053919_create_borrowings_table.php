@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('actual_return_date')->nullable();
             $table->enum('status', ['borrowed', 'returned', 'overdue']);
             $table->uuid('book_id');
+            $table->uuid('user_id');
             $table->timestamps();
 
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
